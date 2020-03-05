@@ -1,0 +1,6 @@
+- name: Install required packages
+  become: true
+  package:
+    name:
+      - epel-release
+      - openvpn
