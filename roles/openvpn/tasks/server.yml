@@ -1,4 +1,11 @@
 ---
+- name: Ca certificate is copied in server configuration
+  become: true
+  copy:
+    remote_src: true
+    src: /root/ca/ca.crt
+    dest: /etc/openvpn/ca.crt
+
 - name: Server private key is generated
   become: true
   openssl_privatekey:
@@ -10,6 +17,7 @@
     path: /etc/openvpn/server.csr
     privatekey_path: /etc/openvpn/server.key
     common_name: epsivpn
+    extended_key_usage: "TLS Web Server Authentication"
 
 - name: Server ceritificate is generated
   become: true
@@ -34,6 +42,7 @@
     owner: root
     group: root
     mode: 0644
+    #  notify: restart openvpn
 
 - name: Enable ip forward
   become: true
@@ -41,7 +50,7 @@
     name: net.ipv4.ip_forward
     value: "1"
     state: present
-  notify: restart network
+    #  notify: restart network
 
 - name: TLS encryption keys are generated
   become: true

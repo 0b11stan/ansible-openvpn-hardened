@@ -10,6 +10,7 @@
     path: /root/ca/client.csr
     privatekey_path: /root/ca/client.key
     common_name: client
+    extended_key_usage: "TLS Web Client Authentication"
 
 - name: Client Certificate is generated
   become: true

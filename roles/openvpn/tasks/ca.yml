@@ -14,12 +14,21 @@
   openssl_privatekey:
     path: /root/ca/ca.key
 
+#- name: CA Certificate is generated
+#  become: true
+#  command:
+#    cmd: 'openssl req -nodes -x509 -days 3580 -newkey rsa:4096 -keyout /root/ca/ca.key -out /root/ca/ca.crt -subj "/CN=epsivpn-ca"'
+#    creates: /root/ca/ca.crt
+
 - name: CA CSR is generated
   become: true
   openssl_csr:
     path: /root/ca/ca.csr
     privatekey_path: /root/ca/ca.key
     common_name: epsivpn-ca
+    basic_constraints_critical: true
+    basic_constraints:
+      - "CA:TRUE"
 
 - name: CA Certificate is generated
   become: true

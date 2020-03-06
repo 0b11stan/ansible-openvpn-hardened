@@ -6,7 +6,7 @@ CTR_IP=$$(docker exec $(CTR_NAME) hostname -i)
 ANSIBLE_CMD=ansible-playbook -i inventory.ini -kK site.yml
 
 build:
-	docker build -t $(CTR_NAME) .
+	SSH_USER=$(SSH_USER) SSH_PASS=$(SSH_PASS) docker build -t $(CTR_NAME) .
 
 start:
 	docker run --privileged --name $(CTR_NAME) \
@@ -20,7 +20,6 @@ shell:
 	docker exec -it $(CTR_NAME) /bin/bash
 
 ssh:
-	echo $(SSH_USER):$(SSH_PASS) | docker exec $(CTR_NAME) chpasswd
 	ssh $(SSH_USER)@$(CTR_IP)
 
 ansible-prepare:
@@ -32,3 +31,7 @@ check: ansible-prepare
 
 apply: ansible-prepare
 	$(ANSIBLE_CMD)
+
+test:
+	cd openvpn && \
+		sudo openvpn --config client.ovpn

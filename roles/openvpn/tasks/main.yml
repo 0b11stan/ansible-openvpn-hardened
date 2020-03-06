@@ -2,10 +2,17 @@
 - name: Required packages are installed
   become: true
   package:
+    name: epel-release
+
+- name: Install openvpn
+  become: true
+  yum:
     name:
-      - epel-release
       - openvpn
+      - openssl
       - python-pip
+    state: latest
+    update_cache: true
 
 - name: Certificate Authority is generated
   include_tasks: ca.yml
