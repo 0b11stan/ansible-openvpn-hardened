@@ -1,0 +1,21 @@
+---
+- name: Client private key is generated
+  become: true
+  openssl_privatekey:
+    path: /root/ca/client.key
+
+- name: Client CSR is generated
+  become: true
+  openssl_csr:
+    path: /root/ca/client.csr
+    privatekey_path: /root/ca/client.key
+    common_name: client
+
+- name: Client Certificate is generated
+  openssl_certificate:
+    path: /root/ca/client.crt
+    csr_path: /root/ca/client.csr
+    ownca_path: /root/ca/ca.crt
+    ownca_privatekey_path: /root/ca/ca.key
+    provider: ownca
+...

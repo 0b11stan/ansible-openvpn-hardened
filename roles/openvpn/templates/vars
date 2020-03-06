@@ -1,0 +1,7 @@
+set KEY_COUNTRY=FR
+set KEY_PROVINCE=NouvelleAquitaine
+set KEY_CITY=Bordeaux
+set KEY_ORG=EPSI
+set KEY_EMAIL=tristan.pinaudeau@epsi.fr
+set KEY_CN=EPSIVPN-CA
+set KEY_NAME=EPSIVPN-TEST
