@@ -33,6 +33,10 @@
     - "/root/ca/ca.crt"
     - "/etc/openvpn/{{ server_name }}.tlsauth"
 
+- name: Retrive server's ip
+  set_fact:
+    server_ip: "{{ ansible_default_ipv4.address }}"
+
 - name: OVPN Client file is created
   local_action:
     module: template

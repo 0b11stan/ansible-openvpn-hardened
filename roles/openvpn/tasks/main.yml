@@ -1,8 +1,7 @@
 ---
 - name: Required packages are installed
   become: true
-  package:
-    name: epel-release
+  package: name=epel-release
 
 - name: Install openvpn
   become: true
