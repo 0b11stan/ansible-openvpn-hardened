@@ -1,16 +1,15 @@
-cat vars
-./easyrsa init-pki
-./easyrsa build-ca
-| ca key passphrase : P@ssw0rd
-| common name : Epsi VPN
+# Ansible for hardened OpenVPN
 
-./easyrsa build-server-full server
-| pem pass phrase : P@ssw0rd
+## Usage
 
-./easyrsa build-client-full francois
-| pem pass phrase : montagne
+Dans un premier temps, copiez le fichier d'inventaire pour modifier les valeurs souhaités.
+```bash
+cp inventory.ini.dist inventory.ini
+vim inventory.ini
+```
 
-./easyrsa gen-dh
-| ==> /usr/share/easy-rsa/3/pki/dh.pem
-
+Pour jouer votre playbook:
+```bash
+make apply
+```
 

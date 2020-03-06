@@ -26,10 +26,10 @@ ansible-prepare:
 	cp inventory.ini.dist inventory.ini
 	echo $(CTR_IP) | tee -a inventory.ini
 
-check: ansible-prepare
+check:# ansible-prepare
 	$(ANSIBLE_CMD) --check --diff
 
-apply: ansible-prepare
+apply:# ansible-prepare
 	$(ANSIBLE_CMD)
 
 test:
