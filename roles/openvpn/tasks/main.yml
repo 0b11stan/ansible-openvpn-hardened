@@ -7,101 +7,12 @@
       - openvpn
       - python-pip
 
-- name: Required pip packages are installed
-  become: true
-  pip: name=pyopenssl
+- name: Certificate Authority is generated
+  include_tasks: ca.yml
 
-- name: OpenVPN ca dir exists
-  become: true
-  file:
-    state: directory
-    path: /root/ca/
+- name: Server is configured
+  include_tasks: server.yml
 
-- name: CA private key is generated
-  become: true
-  openssl_privatekey:
-    path: /root/ca/ca.key
-
-- name: CA CSR is generated
-  become: true
-  openssl_csr:
-    path: /root/ca/ca.csr
-    privatekey_path: /root/ca/ca.key
-    common_name: epsivpn-ca
-
-- name: CA Certificate is generated
-  become: true
-  openssl_certificate:
-    path: /root/ca/ca.crt
-    privatekey_path: /root/ca/ca.key
-    csr_path: /root/ca/ca.csr
-    provider: selfsigned
-
-- name: Server private key is generated
-  become: true
-  openssl_privatekey:
-    path: /etc/openvpn/server.key
-
-- name: Server certificate request is generated
-  become: true
-  openssl_csr:
-    path: /etc/openvpn/server.csr
-    privatekey_path: /etc/openvpn/server.key
-    common_name: epsivpn
-
-- name: Server ceritificate is generated
-  become: true
-  openssl_certificate:
-    path: /etc/openvpn/server.crt
-    csr_path: /etc/openvpn/server.csr
-    ownca_path: /root/ca/ca.crt
-    ownca_privatekey_path: /root/ca/ca.key
-    provider: ownca
-
-- name: Generate DH Parameters with a different size (2048 bits)
-  become: true
-  openssl_dhparam:
-    path: /etc/openvpn/dh.pem
-    size: 2048
-
-- name: Configure openvpn
-  become: true
-  template:
-    src: server.conf
-    dest: /etc/openvpn/server.conf
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Client private key is generated
-  become: true
-  openssl_privatekey:
-    path: /root/ca/client.key
-
-- name: Client CSR is generated
-  become: true
-  openssl_csr:
-    path: /root/ca/client.csr
-    privatekey_path: /root/ca/client.key
-    common_name: client
-
-- name: Client Certificate is generated
-  become: true
-  openssl_certificate:
-    path: /root/ca/client.crt
-    csr_path: /root/ca/client.csr
-    ownca_path: /root/ca/ca.crt
-    ownca_privatekey_path: /root/ca/ca.key
-    provider: ownca
-
-- name: Retriving client files
-  become: true
-  fetch:
-    src: "/root/ca/{{ item }}"
-    dest: ./ovpn/
-    flat: true
-  loop:
-    - client.crt
-    - client.key
-    - ca.crt
+- name: Client is configured
+  include_tasks: client.yml
 ...

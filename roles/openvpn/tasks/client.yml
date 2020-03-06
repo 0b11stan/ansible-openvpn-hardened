@@ -12,10 +12,29 @@
     common_name: client
 
 - name: Client Certificate is generated
+  become: true
   openssl_certificate:
     path: /root/ca/client.crt
     csr_path: /root/ca/client.csr
     ownca_path: /root/ca/ca.crt
     ownca_privatekey_path: /root/ca/ca.key
     provider: ownca
+
+- name: Retriving client files
+  become: true
+  fetch:
+    src: "{{ item }}"
+    dest: ./ovpn/
+    flat: true
+  loop:
+    - "/root/ca/client.crt"
+    - "/root/ca/client.key"
+    - "/root/ca/ca.crt"
+    - "/etc/openvpn/{{ server_name }}.tlsauth"
+
+- name: OVPN Client file is created
+  local_action:
+    module: template
+    src: client.ovpn
+    dest: ./ovpn/client.ovpn
 ...

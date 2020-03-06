@@ -1,0 +1,31 @@
+---
+- name: Required pip packages are installed
+  become: true
+  pip: name=pyopenssl
+
+- name: OpenVPN ca dir exists
+  become: true
+  file:
+    state: directory
+    path: /root/ca/
+
+- name: CA private key is generated
+  become: true
+  openssl_privatekey:
+    path: /root/ca/ca.key
+
+- name: CA CSR is generated
+  become: true
+  openssl_csr:
+    path: /root/ca/ca.csr
+    privatekey_path: /root/ca/ca.key
+    common_name: epsivpn-ca
+
+- name: CA Certificate is generated
+  become: true
+  openssl_certificate:
+    path: /root/ca/ca.crt
+    privatekey_path: /root/ca/ca.key
+    csr_path: /root/ca/ca.csr
+    provider: selfsigned
+...

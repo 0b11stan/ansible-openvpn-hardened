@@ -1,0 +1,11 @@
+---
+- name: restart network
+  systemd:
+    state: restarted
+    name: network
+
+- name: restart openvpn
+  systemd:
+    state: restarted
+    name: openvpn@server
+...
