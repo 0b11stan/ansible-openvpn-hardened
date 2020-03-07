@@ -1,0 +1,63 @@
+---
+- name: Incomming OpenVPN traffic is allowed
+  become: true
+  iptables:
+    chain: INPUT
+    in_interface: eth0
+    ctstate: NEW
+    protocol: tcp
+    destination_port: "{{ openvpn_port }}"
+    jump: ACCEPT
+
+- name: TUN interface connections to OpenVPN server is allowed
+  become: true
+  iptables:
+    chain: INPUT
+    in_interface: tun+
+    jump: ACCEPT
+
+- name: TUN interface connections can be forwarded through other interfaces
+  become: true
+  iptables:
+    chain: FORWARD
+    in_interface: tun+
+    jump: ACCEPT
+
+- name: traffic can be forwarded between tun and eth interfaces
+  become: true
+  iptables:
+    chain: FORWARD
+    in_interface: tun+
+    out_interface: eth0
+    ctstate:
+      - RELATED
+      - ESTABLISHED
+    jump: ACCEPT
+
+- name: traffic can be forwarded between tun and eth interfaces
+  become: true
+  iptables:
+    chain: FORWARD
+    in_interface: eth0
+    out_interface: tun+
+    ctstate:
+      - RELATED
+      - ESTABLISHED
+    jump: ACCEPT
+
+- name: VPN traffic is nated to internet.
+  become: true
+  iptables:
+    table: nat
+    chain: POSTROUTING
+    source: 10.8.0.0/24
+    out_interface: eth0
+    jump: MASQUERADE
+
+- name: outgoing tun traffic is allowed
+  become: true
+  iptables:
+    chain: OUTPUT
+    out_interface: tun+
+    jump: ACCEPT
+...

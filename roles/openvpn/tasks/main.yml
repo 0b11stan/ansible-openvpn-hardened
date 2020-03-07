@@ -14,11 +14,15 @@
     update_cache: true
 
 - name: Certificate Authority is generated
-  include_tasks: ca.yml
+  import_tasks: ca.yml
 
 - name: Server is configured
-  include_tasks: server.yml
+  import_tasks: server.yml
 
 - name: Client is configured
-  include_tasks: client.yml
+  import_tasks: client.yml
+
+- name: Iptables rules are configured
+  import_tasks: iptables.yml
+  tags: iptables
 ...

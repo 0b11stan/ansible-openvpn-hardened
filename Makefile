@@ -35,6 +35,9 @@ ansible-prepare:
 dev: ssh-prepare ansible-prepare
 	$(ANSIBLE_CMD)
 
+iptables: ssh-prepare ansible-prepare
+	$(ANSIBLE_CMD) -t iptables
+
 test:
 	cd ovpn && sudo openvpn --config client.ovpn
 
