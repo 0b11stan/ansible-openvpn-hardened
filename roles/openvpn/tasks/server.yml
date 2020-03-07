@@ -56,4 +56,11 @@
   command:
     cmd: "openvpn --genkey --secret /etc/openvpn/{{ server_name }}.tlsauth"
     creates: "/etc/openvpn/{{ server_name }}.tlsauth"
+
+- name: OpenVPN is started and enabled
+  become: true
+  systemd:
+    name: openvpn@server
+    state: started
+    enabled: true
 ...
