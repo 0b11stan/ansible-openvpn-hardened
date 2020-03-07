@@ -42,7 +42,7 @@
     owner: root
     group: root
     mode: 0644
-    #  notify: restart openvpn
+  notify: restart openvpn
 
 - name: Enable ip forward
   become: true
@@ -50,7 +50,6 @@
     name: net.ipv4.ip_forward
     value: "1"
     state: present
-    #  notify: restart network
 
 - name: TLS encryption keys are generated
   become: true

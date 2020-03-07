@@ -33,7 +33,7 @@
     - "/root/ca/ca.crt"
     - "/etc/openvpn/{{ server_name }}.tlsauth"
 
-- name: Retrive server's ip
+- name: Retrive server ip
   set_fact:
     server_ip: "{{ ansible_default_ipv4.address }}"
 
